@@ -124,7 +124,7 @@ def addSales():
         print("Enter sales details: ")
         inputs["product_id"] = input("Product Id: ")
         inputs["date"] = input("Date (YYYY-MM-DD): ")
-        inputs["quantity_before_sales"] = input("Quantity Before Sales: ")
+        inputs["quantity_before_sales"] = int(input("Quantity Before Sales: "))
         inputs["quantity_after_sales"] = int(0)
 
         query = "INSERT INTO sales(product_id, date, quantity_before_sales, quantity_after_sales) VALUES('%s', '%s', '%d', '%d')" %(inputs["product_id"], inputs["date"], inputs["quantity_before_sales"], inputs["quantity_after_sales"])
@@ -135,6 +135,29 @@ def addSales():
     except pymysql.Error as e:
         con.rollback()
         print('Failed to insert into database')
+        print('Error {!r}, Error Number {}'.format(e, e.args[0]))
+
+
+def updateSales():
+    try:
+        input_date = input("Enter a date (YYYY-MM-DD): ")
+        query = "SELECT * FROM sales WHERE date = '%s'" %(input_date)
+        targets = cur.execute(query).fetchall()
+
+        for target in targets:
+            target = target.split(' ')
+            print("Product ID: '%s' Quantity Before Sales: '%d' Quantity After Sales: '%d'" %(target[0], target[2], target[2]))
+            choice = input("Want to change quantity before sales? [y/n] ")
+            if choice == 'y':
+                target[2] = int(input("Updated Quantity Before Sales: "))
+            target[3] = int(input("Updated Quantity After Sales: "))
+            query1 = "UPDATE sales SET quantity_before_sales = '%d', quantity_after_sales = '%d' WHERE date = '%s' AND product_id = '%s'" %(target[2], target[3], target[1], target[0])
+            cur.execute(query1)
+            con.commit()
+        print("Sales details updated to the database")
+    except pymysql.Error as e:
+        con.rollback()
+        print('Failed to update the database')
         print('Error {!r}, Error Number {}'.format(e, e.args[0]))
 
 
