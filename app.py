@@ -3,7 +3,6 @@ import pymysql
 import pymysql.cursors
 
 
-
 def createTeamMember():
     try:
         inputs = {}
@@ -34,8 +33,7 @@ def createTeamMember():
         print('Error {!r}, Error Number {}'.format(e, e.args[0]))
 
 
-
-def createFunders():
+def createFunder():
     try:
         inputs = {}
         print("Enter funder's details: ")
@@ -59,13 +57,12 @@ def createFunders():
         print('Error {!r}, Error Number {}'.format(e, e.args[0])) 
 
 
-
-def addFundings():
+def addFunding():
     try:
         inputs = {}
         print("Enter funding details: ")
         inputs["roll_number"] = input("Roll Number: ")
-        inputs["date"] = input("Date (YYYY-MM-DD): ")
+        inputs["date"] = input("Date and Time (YYYY-MM-DD HH:MM:SS) ")
         inputs["amount"] = input("Amount in INR: ")
         inputs["mode"] = input("Mode: ")
         inputs["transaction_id"] = input("Transaction ID: ")
@@ -80,6 +77,25 @@ def addFundings():
         print('Failed to insert into database')
         print('Error {!r}, Error Number {}'.format(e, e.args[0]))
 
+
+def createProduct():
+    try:
+        inputs = {}
+        print("Enter product details: ")
+        inputs["product_id"] = input("Product ID: ")
+        inputs["product_category"] = input("Product Category: ")
+        inputs["product_name"] = input("Product Name: ")
+        inputs["product_mrp"] = input("Product MRP: ")
+
+        query = "INSERT INTO products(product_id, product_category, product_name, product_mrp) VALUES('%s', '%s', '%s', '%f')" %(inputs["product_id"], inputs["products_category"], input["product_name"], input["product_mrp"])
+        print(query)
+        cur.execute(query)
+        con.commit()
+        print("Product added to the database")
+    except pymysql.Error as e:
+        con.rollback()
+        print('Failed to insert into database')
+        print('Error {!r}, Error Number {}'.format(e, e.args[0]))
 
 
 while(True):
