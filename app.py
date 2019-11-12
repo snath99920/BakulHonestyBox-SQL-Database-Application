@@ -2,26 +2,28 @@ import subprocess as sp
 import pymysql
 import pymysql.cursors
 
+
+
 def createTeamMember():
     try:
-        input = {}
+        inputs = {}
         print("Enter team member's details: ")
         name = (input("Name (First Name, Last Name): ")).split(' ')
-        input["first_name"] = name [0]
-        input["last_name"] = name [1]
-        input["roll_number"] = input("Roll Number: ")
-        input["email"] = input("Email Address: ")
-        input["contact_number"] = input("Contact Number: ")
+        inputs["first_name"] = name [0]
+        inputs["last_name"] = name [1]
+        inputs["roll_number"] = input("Roll Number: ")
+        inputs["email"] = input("Email Address: ")
+        inputs["contact_number"] = input("Contact Number: ")
         works = (input("Work ID: ")).split(' ')
         
-        query1 = "INSERT INTO team_members(first_name, last_name, roll_number, email, contact_number) VALUES('%s', '%s', '%d', '%s', '%d')" %(input["first_name"], input["last_name"], input["roll_number"], input["email"], input["contact_number"])
+        query1 = "INSERT INTO team_members(first_name, last_name, roll_number, email, contact_number) VALUES('%s', '%s', '%d', '%s', '%d')" %(inputs["first_name"], inputs["last_name"], inputs["roll_number"], inputs["email"], inputs["contact_number"])
 
         print(query1)
         cur.execute(query1)
         con.commit()
 
         for work in works:
-            query2 = "INSERT INTO works(roll_number, job_id) VALUES('%d', '%s')" %(input["roll_number"], work)
+            query2 = "INSERT INTO works(roll_number, job_id) VALUES('%d', '%s')" %(inputs["roll_number"], work)
             print(query2)
             cur.execute(query2)
             con.commit()
@@ -30,6 +32,55 @@ def createTeamMember():
         con.rollback()
         print('Failed to insert into database')
         print('Error {!r}, Error Number {}'.format(e, e.args[0]))
+
+
+
+def createFunders():
+    try:
+        inputs = {}
+        print("Enter funder's details: ")
+        name = (input("Name (First Name, Last Name): ")).split(' ')
+        inputs["first_name"] = name [0]
+        inputs["last_name"] = name [1]
+        inputs["roll_number"] = input("Roll Number: ")
+        inputs["email"] = input("Email Address: ")
+        inputs["contact_number"] = input("Contact Number: ")
+        
+        query = "INSERT INTO funders(first_name, last_name, roll_number, email, contact_number) VALUES('%s', '%s', '%d', '%s', '%d')" %(inputs["first_name"], inputs["last_name"], inputs["roll_number"], inputs["email"], inputs["contact_number"])
+        
+        print(query)
+        cur.execute(query)
+        con.commit()
+
+        print("Funder's Details Added To The Database")
+    except pymysql.Error as e:
+        con.rollback()
+        print('Failed to insert into database')
+        print('Error {!r}, Error Number {}'.format(e, e.args[0])) 
+
+
+
+def addFundings():
+    try:
+        inputs = {}
+        print("Enter funding details: ")
+        inputs["roll_number"] = input("Roll Number: ")
+        inputs["date"] = input("Date (YYYY-MM-DD): ")
+        inputs["amount"] = input("Amount in INR: ")
+        inputs["mode"] = input("Mode: ")
+        inputs["transaction_id"] = input("Transaction ID: ")
+
+        query = "INSERT INTO fundings(roll_number, date, amount, mode, transaction_id) VALUES('%d', '%s', '%d', '%s', '%s')" %(inputs["roll_number"], inputs["date"], inputs["amount"], inputs["mode"], inputs["transaction_id"])
+        print(query)
+        cur.execute(query)
+        con.commit()
+        print("Funding added to the database")
+    except pymysql.Error as e:
+        con.rollback()
+        print('Failed to insert into database')
+        print('Error {!r}, Error Number {}'.format(e, e.args[0]))
+
+
 
 while(True):
     temp = sp.call('clear', shell=True)
