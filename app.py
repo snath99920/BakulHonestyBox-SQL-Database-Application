@@ -117,6 +117,27 @@ def addProcurement():
         print('Failed to insert into database')
         print('Error {!r}, Error Number {}'.format(e, e.args[0]))
 
+
+def addSales():
+    try:
+        inputs = {}
+        print("Enter sales details: ")
+        inputs["product_id"] = input("Product Id: ")
+        inputs["date"] = input("Date (YYYY-MM-DD): ")
+        inputs["quantity_before_sales"] = input("Quantity Before Sales: ")
+        inputs["quantity_after_sales"] = int(0)
+
+        query = "INSERT INTO sales(product_id, date, quantity_before_sales, quantity_after_sales) VALUES('%s', '%s', '%d', '%d')" %(inputs["product_id"], inputs["date"], inputs["quantity_before_sales"], inputs["quantity_after_sales"])
+        print(query)
+        cur.execute(query)
+        con.commit()
+        print("Initial sales details added to the database")
+    except pymysql.Error as e:
+        con.rollback()
+        print('Failed to insert into database')
+        print('Error {!r}, Error Number {}'.format(e, e.args[0]))
+
+
 while(True):
     temp = sp.call('clear', shell=True)
     username = input("Username: ")
