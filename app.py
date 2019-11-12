@@ -173,6 +173,9 @@ def addAccount():
             query1 = "SELECT P.product_mrp * S.quantity_before_sales FROM product AS P, sales AS S WHERE P.product_id = '%s' AND S.product_id = '%s' AND S.date = '%s'" %(target[0], target[0], target[1])
             total_expected_revenue += cur.execute(query1).fetchone()
             con.commit()
+            query2 ="UPDATE sales SET expected_revenue = '%f' WHERE date = '%s' AND product_id = '%s'" %(total_expected_revenue, target[1], target[0])
+            cur.execute(query2)
+            con.commit()
         print("Accounts are updated to the database")
     except pymysql.Error as e:
         con.rollback()
@@ -190,6 +193,9 @@ def finalAccount():
             target = target.split(' ')
             query1 = "SELECT P.product_mrp * (S.quantity_before_sales - S.quantity_after_sales) FROM product AS P, sales AS S WHERE P.product_id = '%s' AND S.product_id = '%s' AND S.date = '%s'" %(target[0], target[0], target[1])
             total_expected_revenue += cur.execute(query1).fetchone()
+            con.commit()
+            query2 ="UPDATE sales SET expected_revenue = '%f' WHERE date = '%s' AND product_id = '%s'" %(total_expected_revenue, target[1], target[0])
+            cur.execute(query2)
             con.commit()
         print("Accounts are updated to the database")
     except pymysql.Error as e:
