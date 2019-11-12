@@ -27,6 +27,8 @@ def createTeamMember():
             con.commit()
         print("Team Member Added To The Database")
     except pymysql.Error as e:
+        con.rollback()
+        print('Failed to insert into database')
         print('Error {!r}, Error Number {}'.format(e, e.args[0]))
 
 while(True):
@@ -50,7 +52,7 @@ while(True):
         else:
             print("Failed to Connect")
 
-        temp = input("Enter any key to continue")
+        temp = input("Enter any key to continue> ")
 
         with con:
             cur = con.cursor()
@@ -64,15 +66,11 @@ while(True):
                     break
                 else:
                     dispatch(choice)
-                temp = input("Enter any key to contine")
+                temp = input("Enter any key to contine> ")
 
     except:
         temp = sp.call('clear', shell=True)
         print("Connection Refused: Invalid credentials or Permission Denied")
-        option = input("Enter exit to exit, else continue ")
+        option = input("Enter exit to exit and anything else continue> ")
         if option == 'exit':
             break
-
-
-
-
