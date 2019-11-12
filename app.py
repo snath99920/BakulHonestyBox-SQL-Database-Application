@@ -45,7 +45,6 @@ def createFunder():
         inputs["contact_number"] = input("Contact Number: ")
         
         query = "INSERT INTO funders(first_name, last_name, roll_number, email, contact_number) VALUES('%s', '%s', '%d', '%s', '%d')" %(inputs["first_name"], inputs["last_name"], inputs["roll_number"], inputs["email"], inputs["contact_number"])
-        
         print(query)
         cur.execute(query)
         con.commit()
